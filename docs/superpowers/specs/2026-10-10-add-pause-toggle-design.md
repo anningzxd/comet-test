@@ -2,6 +2,8 @@
 comet_change: add-pause-toggle
 role: technical-design
 canonical_spec: openspec
+archived-with: 2026-10-10-add-pause-toggle
+status: final
 ---
 
 # 贪吃蛇暂停功能技术设计

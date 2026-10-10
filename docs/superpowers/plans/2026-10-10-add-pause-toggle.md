@@ -2,6 +2,7 @@
 change: add-pause-toggle
 design-doc: docs/superpowers/specs/2026-10-10-add-pause-toggle-design.md
 base-ref: 432f413f0041f4d22fc826b2b69edc653ec8a23a
+archived-with: 2026-10-10-add-pause-toggle
 ---
 
 <!-- comet-task-authority: docs/openspec/changes/add-pause-toggle/tasks.md -->
