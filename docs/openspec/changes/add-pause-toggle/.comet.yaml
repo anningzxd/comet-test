@@ -1,6 +1,6 @@
 workflow: full
 language: zh-CN
-phase: verify
+phase: archive
 context_compression: off
 build_mode: autonomous
 build_pause: null
@@ -13,13 +13,13 @@ auto_transition: true
 base_ref: 432f413f0041f4d22fc826b2b69edc653ec8a23a
 design_doc: docs/superpowers/specs/2026-10-10-add-pause-toggle-design.md
 plan: docs/superpowers/plans/2026-10-10-add-pause-toggle.md
-verify_result: pending
-verify_failures: 1
-verification_report: null
+verify_result: pass
+verify_failures: 0
+verification_report: docs/superpowers/reports/2026-10-10-add-pause-toggle-verify.md
 branch_status: pending
 created_at: 2026-10-10
-verified_at: null
-archive_confirmation: null
+verified_at: 2026-10-10
+archive_confirmation: pending
 archived: false
 bound_branch: main
 direct_override: true
@@ -28,4 +28,4 @@ handoff_hash: c4bbecb2e7cd8bec9bb5d54cc0c4b503df73b4e9929e18fccf4b2917b6bc6043
 classic_profile: full
 classic_migration: 1
 run_id: b4eddfe3-0476-49d2-9ad2-83564bfbdd54
-check_epoch: 5
+check_epoch: 6
