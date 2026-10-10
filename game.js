@@ -20,6 +20,7 @@
   var INIT_LEN = 3;              // 蛇的初始长度（格）
   var INIT_DIR = { x: 1, y: 0 }; // 初始移动方向：向右
   var RESTART_KEY = ' ';         // 结束状态下的重开键（空格）
+  var PAUSE_KEY = 'p';           // 暂停 / 继续键（同时接受大写 P）
 
   var COLORS = {
     background: '#0f1720',
@@ -48,6 +49,7 @@
   };
 
   var STATUS_RUNNING = 'RUNNING';
+  var STATUS_PAUSED = 'PAUSED';   // 暂停：不推进，但仍在局中
   var STATUS_OVER = 'OVER';
 
   /* ------------------------------------------------------------------ *
@@ -226,6 +228,22 @@
     ctx.fillText('按空格键重开', width / 2, height / 2 + 42);
   }
 
+  function drawPauseOverlay(width, height) {
+    ctx.fillStyle = COLORS.overlay;
+    ctx.fillRect(0, 0, width, height);
+
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    ctx.fillStyle = COLORS.overlayTitle;
+    ctx.font = 'bold 32px system-ui, "Microsoft YaHei", sans-serif';
+    ctx.fillText('已暂停', width / 2, height / 2 - 22);
+
+    ctx.fillStyle = COLORS.overlaySub;
+    ctx.font = '20px system-ui, "Microsoft YaHei", sans-serif';
+    ctx.fillText('按 P 继续', width / 2, height / 2 + 26);
+  }
+
   function draw() {
     var width = COLS * CELL;
     var height = ROWS * CELL;
@@ -245,8 +263,11 @@
       fillCell(game.snake[i], 0.08);
     }
 
+    // 结束与暂停两态互斥，覆盖层二选一
     if (game.status === STATUS_OVER) {
       drawOverlay(width, height);
+    } else if (game.status === STATUS_PAUSED) {
+      drawPauseOverlay(width, height);
     }
   }
 
@@ -255,11 +276,41 @@
    * ------------------------------------------------------------------ */
 
   function onKeyDown(event) {
+    // 命令键只响应「无修饰键的按下」。带修饰键的组合属于浏览器或系统：
+    // Ctrl/Cmd + P 是打印，Ctrl + 空格是常见输入法切换，Alt + 空格在 Windows
+    // 上打开窗口菜单——这些都不应被游戏截获（尤其不该被 preventDefault 吞掉）。
+    var unmodified = !event.ctrlKey && !event.metaKey && !event.altKey;
+    var isSpace = unmodified && (event.key === RESTART_KEY || event.key === 'Spacebar');
+    var isPause = unmodified &&
+      (event.key === PAUSE_KEY || event.key === PAUSE_KEY.toUpperCase());
+
+    // 空格与 P 都是「单次命令键」，不响应系统按键自动重复。
+    // 否则按住不放会反复触发：暂停会表现为「按 P 没反应」，重开会反复重置。
+    if ((isSpace || isPause) && event.repeat) {
+      if (isSpace) {
+        event.preventDefault();
+      }
+      return;
+    }
+
     // 空格键：阻止页面滚动；仅在结束状态下开新局
-    if (event.key === RESTART_KEY || event.key === 'Spacebar') {
+    if (isSpace) {
       event.preventDefault();
       if (game.status === STATUS_OVER) {
         resetGame();
+      }
+      return;
+    }
+
+    // P 键：在运行与暂停两态之间切换。结束态不处理。
+    // 本分支必须早于下方方向映射表的提前返回——'p' 不在映射表中，
+    // 写在其后会被直接 return，导致 P 永不生效。
+    // 浏览器对单独按 P 无默认行为，无需 preventDefault。
+    if (isPause) {
+      if (game.status === STATUS_RUNNING) {
+        game.status = STATUS_PAUSED;
+      } else if (game.status === STATUS_PAUSED) {
+        game.status = STATUS_RUNNING;
       }
       return;
     }

@@ -1,0 +1,16 @@
+{
+  "change": "add-pause-toggle",
+  "phase": "design",
+  "mode": "compact",
+  "canonical_spec": "openspec",
+  "task_hash_policy": "task-content-v1",
+  "generated_by": "comet-handoff.sh",
+  "context_hash": "03c34443a8554c89ba6137945079b92b749229e53d11d0095bb68aa8e1467d0d",
+  "files": [
+    { "path": "docs/openspec/changes/add-pause-toggle/proposal.md", "sha256": "840405eb77997df9c6ab814aec83003183ea9d3461f44cd95580e37256411f73" },
+    { "path": "docs/openspec/changes/add-pause-toggle/design.md", "sha256": "e2a41957aa410ee475780322cd43ddf933d977d6c1c36a3eab06b0b781b904cd" },
+    { "path": "docs/openspec/changes/add-pause-toggle/tasks.md", "sha256": "2850f25e09650dba6b05160991994182ed0eb708dbd63d3588b46fa8633d79d7" },
+    { "path": "docs/openspec/changes/add-pause-toggle/.openspec.yaml", "sha256": "e61703315c59969805e021ec521ca189369aaf8ea902d52c5e39c7fbc603598f" },
+    { "path": "docs/openspec/changes/add-pause-toggle/specs/snake-game/spec.md", "sha256": "b716438b9407cf637d7fbe0a24271b4108d6739306c547715b93fee5936b9f5e" }
+  ]
+}
