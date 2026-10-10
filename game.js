@@ -276,10 +276,14 @@
    * ------------------------------------------------------------------ */
 
   function onKeyDown(event) {
-    // 命令键只响应「无修饰键的按下」。带修饰键的组合属于浏览器或系统：
-    // Ctrl/Cmd + P 是打印，Ctrl + 空格是常见输入法切换，Alt + 空格在 Windows
-    // 上打开窗口菜单——这些都不应被游戏截获（尤其不该被 preventDefault 吞掉）。
-    var unmodified = !event.ctrlKey && !event.metaKey && !event.altKey;
+    // 命令键只响应「无修饰键的按下」。带修饰键的组合属于浏览器、系统或输入法：
+    // Ctrl/Cmd + P 是打印，Ctrl + 空格与 Shift + 空格是常见的输入法切换
+    // （全角/半角），Alt + 空格在 Windows 上打开窗口菜单——这些都不应被游戏
+    // 截获，尤其不该被 preventDefault 吞掉。
+    // 注意：CapsLock 打开时 event.key 已是 'P' 且 shiftKey 为 false，
+    // 因此排除 Shift 不影响「同时接受 p 与 P」。
+    var unmodified = !event.ctrlKey && !event.metaKey && !event.altKey &&
+      !event.shiftKey;
     var isSpace = unmodified && (event.key === RESTART_KEY || event.key === 'Spacebar');
     var isPause = unmodified &&
       (event.key === PAUSE_KEY || event.key === PAUSE_KEY.toUpperCase());

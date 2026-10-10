@@ -51,9 +51,9 @@
 
 ## 设计阶段回写的 Spec Patch
 
-审查 delta spec 时发现 1 处验收缺口：用户已确认「P 与空格都过滤按键自动重复」，但该行为在 spec 中无对应场景。已回写 `specs/snake-game/spec.md`：新增 **ADDED** Requirement「单次按键命令不响应自动重复」，含 2 个场景（按住 P 不反复切换 / 按住空格只重开一次）。
+审查 delta spec 时发现 1 处验收缺口：用户已确认「P 与空格都过滤按键自动重复」，但该行为在 spec 中无对应场景。已回写 `specs/snake-game/spec.md`：新增 **ADDED** Requirement「命令键只响应无修饰键的单次按下」，含 3 个场景（按住 P 不反复切换 / 按住空格只重开一次 / 带修饰键的组合键不触发命令）。
 
-采用 ADDED 而非 MODIFIED，是因为它不改写既有「游戏启动与重开」的文字，只是新增一条约束。回写后 delta spec 为 **3 条 Requirement / 12 个 Scenario**，`openspec validate --strict` 通过。
+采用 ADDED 而非 MODIFIED，是因为它不改写既有「游戏启动与重开」的文字，只是新增一条约束。回写后 delta spec 为 **3 条 Requirement / 13 个 Scenario**，`openspec validate --strict` 通过。其中第 3 个场景是 Build 阶段据独立审查的发现补入的。
 
 ## Migration Plan
 

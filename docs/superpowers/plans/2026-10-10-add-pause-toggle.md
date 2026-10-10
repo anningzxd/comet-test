@@ -72,6 +72,7 @@ base-ref: 432f413f0041f4d22fc826b2b69edc653ec8a23a
 <!-- comet-task-ref:32e90e01-a44f-4357-b48a-53298c252242 -->
 <!-- comet-task-ref:536c4660-9514-4df8-a965-a2236347837e -->
 <!-- comet-task-ref:147229db-b358-4728-85a1-57b0654115de -->
+<!-- comet-task-ref:9bc94e9d-bba7-4b68-8ecc-ff24c6fe00e3 -->
 
 ## 4. 暂停覆盖层
 
@@ -96,7 +97,7 @@ base-ref: 432f413f0041f4d22fc826b2b69edc653ec8a23a
 ## 6. 集成验收与既有行为回归
 
 - 依赖：任务组 1–5 全部完成
-- 范围：delta spec 12 个 Scenario 走查、主 spec 既有 17 个 Scenario 回归、完整跑一局、交付物边界核对
+- 范围：delta spec 13 个 Scenario 走查、主 spec 既有 17 个 Scenario 回归、完整跑一局、交付物边界核对
 - 审查安排（`review_mode: standard`）：本组完成后，由独立审查者（子代理）对最终 `game.js` / `index.html` / `style.css` 做一次任务级独立审查，重点核对任务组 2 的结构性结论（暂停期间不累积时间）与任务组 3 的 P 分支位置；CRITICAL / IMPORTANT 问题必须修复后再进入 Verify
 
 <!-- comet-task-ref:5c245471-3a61-4f81-b1cb-ac5086d1cbd5 -->
@@ -141,7 +142,7 @@ base-ref: 432f413f0041f4d22fc826b2b69edc653ec8a23a
 node "C:/Users/annin/AppData/Local/Temp/snake-verify/harness-pause.js" "D:/code/ai/comet-todo/game.js"
 ```
 
-结果：**67 / 67 断言通过**。分组覆盖：
+结果：**67 / 67 断言通过**（本轮结果；第二轮修复后又补了 4 条 Shift 断言，最终为 **71 / 71**，见下文「第二轮独立审查」）。分组覆盖：
 
 | 组 | 覆盖内容 | 结果 |
 | --- | --- | --- |
@@ -169,3 +170,19 @@ node "C:/Users/annin/AppData/Local/Temp/snake-verify/harness-pause.js" "D:/code/
 该缺陷是本 change 新引入的行为面（P 是新增的全局命令键），因此在 Build 阶段直接修复，未留作已接受偏差。修复后重跑：**67/67 通过**，其中组 J 含对照组，确认无修饰键的 P 与空格仍正常生效。
 
 **范围限定**：方向键 / WASD 的既有实现同样只比较 `event.key`（`Ctrl+S` 仍会转向），本次**不改变**它们——那是上一 change 的既有行为，改动它属于未被确认的范围扩大。该取舍已记入正式设计文档 §3.6。
+
+### 第二轮独立审查（Verify 阶段）与随之修复
+
+按 `review_mode: standard`，Verify 阶段对**最终 diff** 再安排一次集成审查（因 Build 审查之后代码只发生了审查者自己建议的 MINOR-1 修复，故只补查受影响部分）。
+
+审查者把 `game.js` 复制到仓库外、用 stub DOM 经 Node `vm` 加载真实文件驱动，自建 **87 条断言（连跑 5 次均 87/87）**，并做了**负向对照**证明断言有判别力：把 `unmodified` 还原为修复前的写法 → 恰好在 `Ctrl+P` / `Alt+P` / `Ctrl+空格` 等断言上失败；换用基线 `432f413` → 在暂停相关断言上失败；另原样复现实现者的 67/67，未证伪。
+
+审查结论：**无 CRITICAL、无 IMPORTANT**；2 条 MINOR + 1 条 SUGGESTION，均按 Comet 的规则判定为「范围内可明确修复」而**自动回 Build 修复**，未留作已接受偏差：
+
+| 编号 | 问题 | 处理 |
+| --- | --- | --- |
+| MINOR-2 | `unmodified` 只排除 Ctrl / Cmd / Alt，**漏了 Shift**：运行中 `Shift+空格`（微软拼音全角/半角切换）被 `preventDefault()` 吞掉；**已结束时 `Shift+空格` 会直接把游戏重开**。delta spec 写的是「无修饰键 … Ctrl / Cmd / Alt **等**修饰键」，Shift 已被覆盖，故属实现与 spec 不符 | **已修**：`unmodified` 加上 `!event.shiftKey`。CapsLock 打开时 `event.key` 已是 `'P'` 而 `shiftKey` 为 `false`，故「接受大写 P」不受影响。补断言 J7–J9b（含「结束态 Shift+空格 不重开」） |
+| MINOR-3 | 文档滞后：Build 增量后 delta spec 实为 3 条 Requirement / **13** 个 Scenario，但正式设计 §7/§10、Open 阶段 design.md、实施计划仍写 12；该 ADDED Requirement 的名称也未同步 | **已修**：三处计数改为 13、名称统一为「命令键只响应无修饰键的单次按下」；追加任务 3.6 |
+| SUGGESTION-4 | `proposal.md` 的 Impact 把 `loop()` 列为待改，而设计与实现均确认**无需改动** | **不改写 proposal**（那是设计前的意图记录，改写会篡改历史）。改为在此处与最终验证报告中注明：「`loop()` 未改动」 |
+
+修复后重跑黑盒验证：**71 / 71 通过**（组 J 由 9 条增至 13 条）。

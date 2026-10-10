@@ -95,12 +95,13 @@ P 分支只在运行与暂停两态之间切换：结束态显式不处理（对
 
 ### 3.6 命令键只响应无修饰键的按下（Build 阶段补充）
 
-`isSpace` 与 `isPause` 的判定都加上 `!event.ctrlKey && !event.metaKey && !event.altKey`。
+`isSpace` 与 `isPause` 的判定都加上 `!event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey`。
 
 - **理由**：P 是本次新引入的全局命令键。若只看 `event.key`，运行中按 `Ctrl+P` 会同时弹出浏览器打印对话框**并把游戏切到暂停**，关掉对话框后游戏仍停在暂停态；`Cmd+P`（macOS）与 `Alt+P` 同理。这是本 change 新引入的行为面，必须修。
-- **顺带修正既有空格分支**：原空格分支对任意空格按下都调用 `preventDefault()`，因而吞掉了 `Ctrl+空格`（Windows 下常见的中文输入法切换）与 `Alt+空格`（Windows 的窗口菜单）。加上修饰键排除后这两个组合恢复由系统处理。该项属既有行为的小幅修正，一并记录。
-- **范围限定**：方向键 / WASD 的既有实现同样只比较 `event.key`（`Ctrl+S` 仍会转向），本次**不改变**它们——那是既有行为，改动它属于未被确认的范围扩大。
-- **代价**：带修饰键的组合不再切换暂停 / 重开，这符合 spec「按 P 键」的字面语义。
+- **顺带修正既有空格分支**：原空格分支对任意空格按下都调用 `preventDefault()`，因而吞掉了 `Ctrl+空格`、`Shift+空格`（Windows 下常见的中文输入法全角/半角切换）与 `Alt+空格`（Windows 的窗口菜单）。加上修饰键排除后这些组合恢复由系统或输入法处理。该项属既有行为的小幅修正，一并记录。
+- **Shift 也在排除之列**（第二轮审查补充）：`Shift+空格` 在游戏结束后曾会把游戏重开、在运行中会被 `preventDefault()` 吞掉。排除 `shiftKey` 不影响「同时接受 `p` 与 `P`」的意图——CapsLock 打开时 `event.key` 已是 `'P'` 而 `shiftKey` 为 `false`。
+- **范围限定**：方向键 / WASD 的既有实现同样只比较 `event.key`（`Ctrl+S` 仍会转向），本次**不改变**它们——那是上一 change 的既有行为，改动它属于未被确认的范围扩大。
+- **代价**：带修饰键的组合不再切换暂停 / 重开，这符合 spec「无修饰键的单次按下」的字面语义。
 
 ## 4. 状态迁移
 
@@ -143,7 +144,7 @@ P 分支只在运行与暂停两态之间切换：结束态显式不处理（对
 项目按既有设计非目标不引入测试框架，验证以**浏览器中可观察的行为**为准，分两层：
 
 1. **任务级验证**：`tasks.md` 中每个任务自带验证方式，实现后立即执行并记录结论。
-2. **集成验收**：对照 delta spec 的 3 条 Requirement / 12 个 Scenario 逐条走查；**并回归主 spec `snake-game` 既有 17 个 Scenario**，确认暂停改动未使任何一条失效。
+2. **集成验收**：对照 delta spec 的 3 条 Requirement / 13 个 Scenario 逐条走查；**并回归主 spec `snake-game` 既有 17 个 Scenario**，确认暂停改动未使任何一条失效。
 
 **黑盒手法（沿用上一 change 已验证有效的做法）**：在仓库外用 stub 的 `document` / `canvas` / `requestAnimationFrame` 加载**真实的 `game.js`**，只经 `keydown` 事件与绘制调用两个真实接口观察，不触碰内部变量。该脚本的完整源码已作为附录留在上一 change 的验证报告 `docs/superpowers/reports/2026-10-10-add-snake-game-verify.md` 中，本次直接扩展暂停与按键重复相关断言即可。
 
@@ -170,10 +171,11 @@ P 分支只在运行与暂停两态之间切换：结束态显式不处理（对
 
 设计阶段审查 delta spec 时发现 1 处验收缺口：用户已确认「P 与空格都过滤按键自动重复」，但该行为在 spec 中无对应场景。已回写 `specs/snake-game/spec.md`：
 
-- 新增 **ADDED** Requirement「单次按键命令不响应自动重复」，含 2 个场景：「按住 P 不反复切换」「按住空格只重开一次」。
+- 新增 **ADDED** Requirement「命令键只响应无修饰键的单次按下」，含 3 个场景：「按住 P 不反复切换」「按住空格只重开一次」「带修饰键的组合键不触发命令」。
 - 采用 ADDED 而非 MODIFIED，是因为它不改写既有「游戏启动与重开」的文字（结束后按空格仍可重开），只是新增一条约束。
+- Build 阶段据两轮独立审查又做了一次小规模增量：把该 Requirement 由其初名「单次按键命令不响应自动重复」更名为现名并补第 3 个场景，把「修饰键」从只看 `event.key` 收紧为排除 Ctrl / Cmd / Alt / Shift。
 
-回写后 delta spec 为 **3 条 Requirement / 12 个 Scenario**（原 2 条 / 10 个），`openspec validate --strict` 通过。
+回写后 delta spec 为 **3 条 Requirement / 13 个 Scenario**（原 2 条 / 10 个），`openspec validate --strict` 通过。
 
 ## 11. 实现定位清单
 

@@ -3,7 +3,7 @@
 - Change: add-pause-toggle
 - Phase: design
 - Mode: compact
-- Context hash: 03c34443a8554c89ba6137945079b92b749229e53d11d0095bb68aa8e1467d0d
+- Context hash: c4bbecb2e7cd8bec9bb5d54cc0c4b503df73b4e9929e18fccf4b2917b6bc6043
 
 Generated-by: comet-handoff.sh
 Task hash policy: task-content-v1. Read tasks.md for live completion; excerpts are design-time context.
@@ -67,7 +67,7 @@ OpenSpec remains the canonical capability spec. This handoff is a deterministic,
 
 - Source: docs/openspec/changes/add-pause-toggle/design.md
 - Lines: 1-67
-- SHA256: e2a41957aa410ee475780322cd43ddf933d977d6c1c36a3eab06b0b781b904cd
+- SHA256: 2b7ed1b9bd2d4ba3972c4418e3b360f3ca876d194dc5afc47b649bf462a0a3d0
 
 ```md
 # Design
@@ -123,9 +123,9 @@ OpenSpec remains the canonical capability spec. This handoff is a deterministic,
 
 ## 设计阶段回写的 Spec Patch
 
-审查 delta spec 时发现 1 处验收缺口：用户已确认「P 与空格都过滤按键自动重复」，但该行为在 spec 中无对应场景。已回写 `specs/snake-game/spec.md`：新增 **ADDED** Requirement「单次按键命令不响应自动重复」，含 2 个场景（按住 P 不反复切换 / 按住空格只重开一次）。
+审查 delta spec 时发现 1 处验收缺口：用户已确认「P 与空格都过滤按键自动重复」，但该行为在 spec 中无对应场景。已回写 `specs/snake-game/spec.md`：新增 **ADDED** Requirement「命令键只响应无修饰键的单次按下」，含 3 个场景（按住 P 不反复切换 / 按住空格只重开一次 / 带修饰键的组合键不触发命令）。
 
-采用 ADDED 而非 MODIFIED，是因为它不改写既有「游戏启动与重开」的文字，只是新增一条约束。回写后 delta spec 为 **3 条 Requirement / 12 个 Scenario**，`openspec validate --strict` 通过。
+采用 ADDED 而非 MODIFIED，是因为它不改写既有「游戏启动与重开」的文字，只是新增一条约束。回写后 delta spec 为 **3 条 Requirement / 13 个 Scenario**，`openspec validate --strict` 通过。其中第 3 个场景是 Build 阶段据独立审查的发现补入的。
 
 ## Migration Plan
 
@@ -143,8 +143,8 @@ OpenSpec remains the canonical capability spec. This handoff is a deterministic,
 ## docs/openspec/changes/add-pause-toggle/tasks.md
 
 - Source: docs/openspec/changes/add-pause-toggle/tasks.md
-- Lines: 1-43
-- SHA256: 2850f25e09650dba6b05160991994182ed0eb708dbd63d3588b46fa8633d79d7
+- Lines: 1-44
+- SHA256: 60886376655301963782a90a6fae77d0264ad3f06c0a7d2a50e8b0dc4098c2ac
 
 ```md
 # Tasks
@@ -153,38 +153,39 @@ OpenSpec remains the canonical capability spec. This handoff is a deterministic,
 
 ## 1. 状态机扩展
 
-- [ ] 1.1 在 `game.js` 增加暂停状态常量，并把运行 / 暂停 / 结束三态集中定义；验证：源码中状态常量集中定义，全文件不出现裸字符串形式的状态比较 <!-- comet-task:ff2b809e-199c-4851-bd5a-e002f15b0b56 -->
-- [ ] 1.2 核对既有的状态判断并补齐暂停态的处理，使其在推进、输入、绘制三处都符合 delta spec；验证：源码走查记录上述三处各自的结论，并在浏览器中确认「运行 → 撞墙结束 → 空格重开」这条既有路径行为不回归 <!-- comet-task:fba7081c-85d5-47e7-82e1-08bac5d7f65d -->
+- [x] 1.1 在 `game.js` 增加暂停状态常量，并把运行 / 暂停 / 结束三态集中定义；验证：源码中状态常量集中定义，全文件不出现裸字符串形式的状态比较 <!-- comet-task:ff2b809e-199c-4851-bd5a-e002f15b0b56 -->
+- [x] 1.2 核对既有的状态判断并补齐暂停态的处理，使其在推进、输入、绘制三处都符合 delta spec；验证：源码走查记录上述三处各自的结论，并在浏览器中确认「运行 → 撞墙结束 → 空格重开」这条既有路径行为不回归 <!-- comet-task:fba7081c-85d5-47e7-82e1-08bac5d7f65d -->
 
 ## 2. 主循环的暂停语义
 
-- [ ] 2.1 使暂停期间不累积推进时间（非运行态把时间累加值清零）；验证：暂停约 5 秒后恢复运行，蛇按单格节拍前进，不出现一次前进多格（对应 spec「恢复后不出现补偿式连走」） <!-- comet-task:82e6cb31-1f8f-4cf6-b4b0-5bd4857a7501 -->
-- [ ] 2.2 确认暂停期间蛇不推进、得分不变；验证：暂停后持续观察约 10 秒，蛇的位置与得分显示均无任何变化（对应 spec「暂停期间不推进」） <!-- comet-task:a88e93b9-a3a9-4220-849f-bb6b86c5332e -->
+- [x] 2.1 使暂停期间不累积推进时间（非运行态把时间累加值清零）；验证：暂停约 5 秒后恢复运行，蛇按单格节拍前进，不出现一次前进多格（对应 spec「恢复后不出现补偿式连走」） <!-- comet-task:82e6cb31-1f8f-4cf6-b4b0-5bd4857a7501 -->
+- [x] 2.2 确认暂停期间蛇不推进、得分不变；验证：暂停后持续观察约 10 秒，蛇的位置与得分显示均无任何变化（对应 spec「暂停期间不推进」） <!-- comet-task:a88e93b9-a3a9-4220-849f-bb6b86c5332e -->
 
 ## 3. P 键输入与暂停态输入屏蔽
 
-- [ ] 3.1 在方向键与空格之外增加 P 键分支，在运行与暂停两态之间切换；验证：运行中按 P 进入暂停，再按 P 恢复运行（对应 spec「P 键暂停」「P 键继续」） <!-- comet-task:1d302f2a-a95c-4c4f-8496-e288bf6bc86b -->
-- [ ] 3.2 暂停期间屏蔽方向键与 WASD；验证：暂停中依次按 ↑ ↓ ← → 与 W A S D，蛇的方向与位置均不发生变化（对应 spec「暂停时方向键不被采纳」） <!-- comet-task:6482d6cc-c318-491b-be73-c3cc64dfd987 -->
-- [ ] 3.3 暂停期间屏蔽空格键；验证：暂停中按空格，不开始新的一局，蛇的位置与得分不变，且仍处于暂停状态（对应 spec「暂停时空格不重开」） <!-- comet-task:32e90e01-a44f-4357-b48a-53298c252242 -->
-- [ ] 3.4 结束态不响应 P；验证：让蛇撞墙结束后按 P，结束提示仍然显示，游戏状态与画面均不变化（对应 spec「结束后不能暂停」） <!-- comet-task:536c4660-9514-4df8-a965-a2236347837e -->
-- [ ] 3.5 命令键排除带修饰键的组合（Ctrl / Cmd / Alt + P 或空格）；验证：运行中按 Ctrl+P 不进入暂停（浏览器打印对话框弹出属预期行为），按 Ctrl+空格既不重开也不被 `preventDefault` 吞掉（对应 spec「带修饰键的组合键不触发命令」） <!-- comet-task:147229db-b358-4728-85a1-57b0654115de -->
+- [x] 3.1 在方向键与空格之外增加 P 键分支，在运行与暂停两态之间切换；验证：运行中按 P 进入暂停，再按 P 恢复运行（对应 spec「P 键暂停」「P 键继续」） <!-- comet-task:1d302f2a-a95c-4c4f-8496-e288bf6bc86b -->
+- [x] 3.2 暂停期间屏蔽方向键与 WASD；验证：暂停中依次按 ↑ ↓ ← → 与 W A S D，蛇的方向与位置均不发生变化（对应 spec「暂停时方向键不被采纳」） <!-- comet-task:6482d6cc-c318-491b-be73-c3cc64dfd987 -->
+- [x] 3.3 暂停期间屏蔽空格键；验证：暂停中按空格，不开始新的一局，蛇的位置与得分不变，且仍处于暂停状态（对应 spec「暂停时空格不重开」） <!-- comet-task:32e90e01-a44f-4357-b48a-53298c252242 -->
+- [x] 3.4 结束态不响应 P；验证：让蛇撞墙结束后按 P，结束提示仍然显示，游戏状态与画面均不变化（对应 spec「结束后不能暂停」） <!-- comet-task:536c4660-9514-4df8-a965-a2236347837e -->
+- [x] 3.5 命令键排除带修饰键的组合（Ctrl / Cmd / Alt / Shift + P 或空格）；验证：运行中按 Ctrl+P 不进入暂停（浏览器打印对话框弹出属预期行为），Ctrl+空格 与 Shift+空格 既不在结束态重开、也不被 `preventDefault` 吞掉（对应 spec「带修饰键的组合键不触发命令」） <!-- comet-task:147229db-b358-4728-85a1-57b0654115de -->
+- [ ] 3.6 同步文档中的 delta spec 计数与 Requirement 名称（Build 阶段增量后实为 3 条 Requirement / 13 个 Scenario）；验证：正式设计文档 §7/§10、Open 阶段 design.md、实施计划三处计数均为 13，且该 ADDED Requirement 在三处均名为「命令键只响应无修饰键的单次按下」 <!-- comet-task:9bc94e9d-bba7-4b68-8ecc-ff24c6fe00e3 -->
 
 ## 4. 暂停覆盖层
 
-- [ ] 4.1 在 `draw()` 中为暂停态叠加遮罩并居中显示暂停提示；验证：暂停后画布上出现暂停提示，且文案包含恢复方式（对应 spec「暂停提示可见」） <!-- comet-task:bf4dc1d5-fb4e-4550-96ae-acbaf2ebdb27 -->
-- [ ] 4.2 确认暂停提示与结束提示互斥；验证：暂停状态不显示结束提示，结束状态不显示暂停提示 <!-- comet-task:8489bc15-5d54-40d5-b592-048b031db989 -->
+- [x] 4.1 在 `draw()` 中为暂停态叠加遮罩并居中显示暂停提示；验证：暂停后画布上出现暂停提示，且文案包含恢复方式（对应 spec「暂停提示可见」） <!-- comet-task:bf4dc1d5-fb4e-4550-96ae-acbaf2ebdb27 -->
+- [x] 4.2 确认暂停提示与结束提示互斥；验证：暂停状态不显示结束提示，结束状态不显示暂停提示 <!-- comet-task:8489bc15-5d54-40d5-b592-048b031db989 -->
 
 ## 5. 操作提示文案
 
-- [ ] 5.1 在 `index.html` 的提示行并入 P 键说明；验证：打开页面，提示行同时包含方向键 / WASD、暂停键、重开键三项说明 <!-- comet-task:055740f5-b0de-4a36-8adb-ec01d37cc0ea -->
-- [ ] 5.2 确认提示文案与实际行为一致；验证：按提示逐个按键确认——运行中方向键与 WASD 转向生效、运行中 P 暂停生效、暂停中 P 恢复生效、结束后空格重开生效 <!-- comet-task:ff8f79c9-eefc-49e6-9a90-eaedeb04a2a0 -->
+- [x] 5.1 在 `index.html` 的提示行并入 P 键说明；验证：打开页面，提示行同时包含方向键 / WASD、暂停键、重开键三项说明 <!-- comet-task:055740f5-b0de-4a36-8adb-ec01d37cc0ea -->
+- [x] 5.2 确认提示文案与实际行为一致；验证：按提示逐个按键确认——运行中方向键与 WASD 转向生效、运行中 P 暂停生效、暂停中 P 恢复生效、结束后空格重开生效 <!-- comet-task:ff8f79c9-eefc-49e6-9a90-eaedeb04a2a0 -->
 
 ## 6. 集成验收与既有行为回归
 
-- [ ] 6.1 对照本 change 的 delta spec（ADDED 与 MODIFIED）逐条 Requirement 与 Scenario 走查，记录通过 / 不通过结论 <!-- comet-task:5c245471-3a61-4f81-b1cb-ac5086d1cbd5 -->
-- [ ] 6.2 回归 `docs/openspec/specs/snake-game/spec.md` 主 spec 的 17 个 Scenario，确认暂停改动未使其中任何一条失效 <!-- comet-task:9e3d2321-85ba-44b1-8861-3818f96415db -->
-- [ ] 6.3 完整跑一局：暂停 → 恢复 → 吃食物 → 撞墙结束 → 空格重开 → 再暂停，全程确认控制台无报错、无未捕获异常 <!-- comet-task:27685476-9398-443b-bcaf-b35e4cd5f79c -->
-- [ ] 6.4 确认交付物仍为 `index.html`、`style.css`、`game.js` 三个文件，未新增文件、未引入依赖，且仍可双击 `index.html` 直接运行 <!-- comet-task:f59ed109-db60-4530-a609-a7fb117a3b1e -->
+- [x] 6.1 对照本 change 的 delta spec（ADDED 与 MODIFIED）逐条 Requirement 与 Scenario 走查，记录通过 / 不通过结论 <!-- comet-task:5c245471-3a61-4f81-b1cb-ac5086d1cbd5 -->
+- [x] 6.2 回归 `docs/openspec/specs/snake-game/spec.md` 主 spec 的 17 个 Scenario，确认暂停改动未使其中任何一条失效 <!-- comet-task:9e3d2321-85ba-44b1-8861-3818f96415db -->
+- [x] 6.3 完整跑一局：暂停 → 恢复 → 吃食物 → 撞墙结束 → 空格重开 → 再暂停，全程确认控制台无报错、无未捕获异常 <!-- comet-task:27685476-9398-443b-bcaf-b35e4cd5f79c -->
+- [x] 6.4 确认交付物仍为 `index.html`、`style.css`、`game.js` 三个文件，未新增文件、未引入依赖，且仍可双击 `index.html` 直接运行 <!-- comet-task:f59ed109-db60-4530-a609-a7fb117a3b1e -->
 
 ## Workflow follow-up
 

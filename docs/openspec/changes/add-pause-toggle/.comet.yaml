@@ -8,13 +8,13 @@ subagent_dispatch: null
 tdd_mode: direct
 review_mode: standard
 isolation: current
-verify_mode: null
+verify_mode: full
 auto_transition: true
 base_ref: 432f413f0041f4d22fc826b2b69edc653ec8a23a
 design_doc: docs/superpowers/specs/2026-10-10-add-pause-toggle-design.md
 plan: docs/superpowers/plans/2026-10-10-add-pause-toggle.md
 verify_result: pending
-verify_failures: 0
+verify_failures: 1
 verification_report: null
 branch_status: pending
 created_at: 2026-10-10
@@ -24,8 +24,8 @@ archived: false
 bound_branch: main
 direct_override: true
 handoff_context: docs/openspec/changes/add-pause-toggle/.comet/handoff/design-context.json
-handoff_hash: 03c34443a8554c89ba6137945079b92b749229e53d11d0095bb68aa8e1467d0d
+handoff_hash: c4bbecb2e7cd8bec9bb5d54cc0c4b503df73b4e9929e18fccf4b2917b6bc6043
 classic_profile: full
 classic_migration: 1
 run_id: b4eddfe3-0476-49d2-9ad2-83564bfbdd54
-check_epoch: 3
+check_epoch: 5
