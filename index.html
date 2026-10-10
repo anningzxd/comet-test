@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>贪吃蛇</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="game">
+    <h1 class="game__title">贪吃蛇</h1>
+
+    <div class="game__hud">
+      <span class="game__score-label">得分</span>
+      <span class="game__score" id="score">0</span>
+    </div>
+
+    <canvas class="game__canvas" id="board" width="480" height="480"></canvas>
+
+    <p class="game__hint">方向键 / WASD 控制方向 · 结束后按空格键重开</p>
+  </main>
+
+  <script src="game.js"></script>
+</body>
+</html>

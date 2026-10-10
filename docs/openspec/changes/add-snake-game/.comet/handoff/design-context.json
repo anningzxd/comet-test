@@ -1,0 +1,16 @@
+{
+  "change": "add-snake-game",
+  "phase": "design",
+  "mode": "compact",
+  "canonical_spec": "openspec",
+  "task_hash_policy": "task-content-v1",
+  "generated_by": "comet-handoff.sh",
+  "context_hash": "f9f48b633e5a15beef1210ea9b17e22e46021e27487312bdffbb6bedccf4404d",
+  "files": [
+    { "path": "docs/openspec/changes/add-snake-game/proposal.md", "sha256": "6f9ed16aaa97d13a7745d0d5487a43b13678d5f85f55b689e071c6cbdcfc7680" },
+    { "path": "docs/openspec/changes/add-snake-game/design.md", "sha256": "11446113ac73cc24562bc3c67c664dfeb81a7123792118a33c9705504afff354" },
+    { "path": "docs/openspec/changes/add-snake-game/tasks.md", "sha256": "70832d814f994816e5e2aa264e24dc76f27dde1022052a70d38e1a4c6ce33563" },
+    { "path": "docs/openspec/changes/add-snake-game/.openspec.yaml", "sha256": "e61703315c59969805e021ec521ca189369aaf8ea902d52c5e39c7fbc603598f" },
+    { "path": "docs/openspec/changes/add-snake-game/specs/snake-game/spec.md", "sha256": "6782b1d2eb9223f3c9ca565cd1f3f8e52ce08c423909f891221fd502ef0c4c2c" }
+  ]
+}

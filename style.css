@@ -1,0 +1,84 @@
+:root {
+  --bg: #0b1016;
+  --panel: #121a23;
+  --border: #1f2d3b;
+  --text: #e8eef5;
+  --muted: #8fa2b5;
+  --accent: #6ee7a8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: radial-gradient(circle at 50% 0%, #16222e 0%, var(--bg) 60%);
+  color: var(--text);
+  font-family: system-ui, "Microsoft YaHei", "PingFang SC", sans-serif;
+}
+
+.game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 28px 32px 24px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.45);
+}
+
+.game__title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.game__hud {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.game__score-label {
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+.game__score {
+  font-size: 28px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+
+.game__canvas {
+  display: block;
+  /* 边框不得计入尺寸：JS 设置的 CSS 宽高必须等于逻辑尺寸（480px），
+     否则位图会被非整数缩放而发虚 */
+  box-sizing: content-box;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #0f1720;
+}
+
+.game__hint {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+}
