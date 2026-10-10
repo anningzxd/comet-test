@@ -2,6 +2,8 @@
 comet_change: add-snake-game
 role: technical-design
 canonical_spec: openspec
+archived-with: 2026-10-10-add-snake-game
+status: final
 ---
 
 # 贪吃蛇游戏技术设计

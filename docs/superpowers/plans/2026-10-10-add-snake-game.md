@@ -2,6 +2,7 @@
 change: add-snake-game
 design-doc: docs/superpowers/specs/2026-10-10-snake-game-design.md
 base-ref: c55353c16d29dd3353fa881f40e081c303f82f4a
+archived-with: 2026-10-10-add-snake-game
 ---
 
 <!-- comet-task-authority: docs/openspec/changes/add-snake-game/tasks.md -->
