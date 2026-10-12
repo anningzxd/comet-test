@@ -1,0 +1,16 @@
+{
+  "change": "add-todo-cli",
+  "phase": "design",
+  "mode": "compact",
+  "canonical_spec": "openspec",
+  "task_hash_policy": "task-content-v1",
+  "generated_by": "comet-handoff.sh",
+  "context_hash": "8c44f25b18bf4eccfd9aee36647105709660d44cfefeb7b81817c3048458aed6",
+  "files": [
+    { "path": "docs/openspec/changes/add-todo-cli/proposal.md", "sha256": "b7306ec7de374a1c10c29c8659ff6ce814fc9ca718f8c13ab31243609901929a" },
+    { "path": "docs/openspec/changes/add-todo-cli/design.md", "sha256": "384d2fea7647041a02581e1029a4d7d64097427793d6a149f1e583111702efb0" },
+    { "path": "docs/openspec/changes/add-todo-cli/tasks.md", "sha256": "c88415c6de76fc13a2e126c24245166464e3599c99cefd17ea33d615bf04f7f0" },
+    { "path": "docs/openspec/changes/add-todo-cli/.openspec.yaml", "sha256": "1dfdca412094f24473d8b842866201ec26f200b29b17064b03f1e4982c35a7b9" },
+    { "path": "docs/openspec/changes/add-todo-cli/specs/todo-cli/spec.md", "sha256": "002e4c6019db6212be903c7c1df70d308819c3221f1fdf9c4c8c509acd020278" }
+  ]
+}
