@@ -2,6 +2,7 @@
 change: add-todo-cli
 design-doc: docs/superpowers/specs/2026-10-12-add-todo-cli-design.md
 base-ref: de804b41a1bbcb1a2fca5d281aa97dd715aaa4f8
+archived-with: 2026-10-12-add-todo-cli
 ---
 
 # add-todo-cli 实施计划

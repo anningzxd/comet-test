@@ -2,6 +2,8 @@
 comet_change: add-todo-cli
 role: technical-design
 canonical_spec: openspec
+archived-with: 2026-10-12-add-todo-cli
+status: final
 ---
 
 # add-todo-cli 技术设计
